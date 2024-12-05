@@ -94,6 +94,174 @@ module axi_lite_to_axi #(
   // pragma translate_on
 endmodule
 
+module axi_lite_to_axi_simple #(
+  parameter int unsigned AXI_ADDR_WIDTH = 0,
+  parameter int unsigned AXI_DATA_WIDTH = 0,
+  parameter int unsigned AXI_ID_WIDTH   = 0,
+  parameter int unsigned AXI_STRB_WIDTH = AXI_DATA_WIDTH / 8,
+  parameter int unsigned AXI_USER_WIDTH = 0
+) (
+  /*AUTOINOUTMODPORT("AXI_LITE", "Slave", ".*", "in_")*/
+  // Beginning of automatic in/out/inouts (from modport)
+  output		in_aw_ready,
+  output		in_w_ready,
+  output [1:0]		in_b_resp,
+  output		in_b_valid,
+  output		in_ar_ready,
+  output [AXI_DATA_WIDTH-1:0] in_r_data,
+  output [1:0]		in_r_resp,
+  output		in_r_valid,
+  input [AXI_ADDR_WIDTH-1:0] in_aw_addr,
+  input [2:0]		in_aw_prot,
+  input			in_aw_valid,
+  input [AXI_DATA_WIDTH-1:0] in_w_data,
+  input [AXI_STRB_WIDTH-1:0] in_w_strb,
+  input			in_w_valid,
+  input			in_b_ready,
+  input [AXI_ADDR_WIDTH-1:0] in_ar_addr,
+  input [2:0]		in_ar_prot,
+  input			in_ar_valid,
+  input			in_r_ready,
+  // End of automatics
+  /*AUTOINOUTMODPORT("AXI_BUS", "Master", ".*", "out_")*/
+  // Beginning of automatic in/out/inouts (from modport)
+  output [AXI_ID_WIDTH-1:0] out_aw_id,
+  output [AXI_ADDR_WIDTH-1:0] out_aw_addr,
+  output [7:0]		out_aw_len,
+  output [2:0]		out_aw_size,
+  output [1:0]		out_aw_burst,
+  output		out_aw_lock,
+  output [3:0]		out_aw_cache,
+  output [2:0]		out_aw_prot,
+  output [3:0]		out_aw_qos,
+  output [3:0]		out_aw_region,
+  output [AXI_USER_WIDTH-1:0] out_aw_user,
+  output		out_aw_valid,
+  output [AXI_DATA_WIDTH-1:0] out_w_data,
+  output [AXI_STRB_WIDTH-1:0] out_w_strb,
+  output		out_w_last,
+  output [AXI_USER_WIDTH-1:0] out_w_user,
+  output		out_w_valid,
+  output		out_b_ready,
+  output [AXI_ID_WIDTH-1:0] out_ar_id,
+  output [AXI_ADDR_WIDTH-1:0] out_ar_addr,
+  output [7:0]		out_ar_len,
+  output [2:0]		out_ar_size,
+  output [1:0]		out_ar_burst,
+  output		out_ar_lock,
+  output [3:0]		out_ar_cache,
+  output [2:0]		out_ar_prot,
+  output [3:0]		out_ar_qos,
+  output [3:0]		out_ar_region,
+  output [AXI_USER_WIDTH-1:0] out_ar_user,
+  output		out_ar_valid,
+  output		out_r_ready,
+  input			out_aw_ready,
+  input			out_w_ready,
+  input [AXI_ID_WIDTH-1:0] out_b_id,
+  input [1:0]		out_b_resp,
+  input [AXI_USER_WIDTH-1:0] out_b_user,
+  input			out_b_valid,
+  input			out_ar_ready,
+  input [AXI_ID_WIDTH-1:0] out_r_id,
+  input [AXI_DATA_WIDTH-1:0] out_r_data,
+  input [1:0]		out_r_resp,
+  input			out_r_last,
+  input [AXI_USER_WIDTH-1:0] out_r_user,
+  input			out_r_valid
+  // End of automatics
+);
+
+AXI_LITE#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH)
+) lite();
+/*AUTOASSIGNMODPORT("AXI_LITE", "Slave", "lite", ".*", "in_")*/
+// Beginning of automatic assignments from modport
+assign in_ar_ready = lite.ar_ready;
+assign in_aw_ready = lite.aw_ready;
+assign in_b_resp = lite.b_resp;
+assign in_b_valid = lite.b_valid;
+assign in_r_data = lite.r_data;
+assign in_r_resp = lite.r_resp;
+assign in_r_valid = lite.r_valid;
+assign in_w_ready = lite.w_ready;
+assign lite.ar_addr = in_ar_addr;
+assign lite.ar_prot = in_ar_prot;
+assign lite.ar_valid = in_ar_valid;
+assign lite.aw_addr = in_aw_addr;
+assign lite.aw_prot = in_aw_prot;
+assign lite.aw_valid = in_aw_valid;
+assign lite.b_ready = in_b_ready;
+assign lite.r_ready = in_r_ready;
+assign lite.w_data = in_w_data;
+assign lite.w_strb = in_w_strb;
+assign lite.w_valid = in_w_valid;
+// End of automatics
+
+AXI_BUS#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(0)
+) full();
+/*AUTOASSIGNMODPORT("AXI_BUS", "Master", "full", ".*", "out_")*/
+// Beginning of automatic assignments from modport
+assign out_ar_addr = full.ar_addr;
+assign out_ar_burst = full.ar_burst;
+assign out_ar_cache = full.ar_cache;
+assign out_ar_id = full.ar_id;
+assign out_ar_len = full.ar_len;
+assign out_ar_lock = full.ar_lock;
+assign out_ar_prot = full.ar_prot;
+assign out_ar_qos = full.ar_qos;
+assign out_ar_region = full.ar_region;
+assign out_ar_size = full.ar_size;
+assign out_ar_user = full.ar_user;
+assign out_ar_valid = full.ar_valid;
+assign out_aw_addr = full.aw_addr;
+assign out_aw_burst = full.aw_burst;
+assign out_aw_cache = full.aw_cache;
+assign out_aw_id = full.aw_id;
+assign out_aw_len = full.aw_len;
+assign out_aw_lock = full.aw_lock;
+assign out_aw_prot = full.aw_prot;
+assign out_aw_qos = full.aw_qos;
+assign out_aw_region = full.aw_region;
+assign out_aw_size = full.aw_size;
+assign out_aw_user = full.aw_user;
+assign out_aw_valid = full.aw_valid;
+assign out_b_ready = full.b_ready;
+assign out_r_ready = full.r_ready;
+assign out_w_data = full.w_data;
+assign out_w_last = full.w_last;
+assign out_w_strb = full.w_strb;
+assign out_w_user = full.w_user;
+assign out_w_valid = full.w_valid;
+assign full.ar_ready = out_ar_ready;
+assign full.aw_ready = out_aw_ready;
+assign full.b_id = out_b_id;
+assign full.b_resp = out_b_resp;
+assign full.b_user = out_b_user;
+assign full.b_valid = out_b_valid;
+assign full.r_data = out_r_data;
+assign full.r_id = out_r_id;
+assign full.r_last = out_r_last;
+assign full.r_resp = out_r_resp;
+assign full.r_user = out_r_user;
+assign full.r_valid = out_r_valid;
+assign full.w_ready = out_w_ready;
+// End of automatics
+
+axi_lite_to_axi_intf #(
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH)
+) intf (
+  .in(lite),
+  .out(full)
+);
+
+endmodule
+
 module axi_lite_to_axi_intf #(
   parameter int unsigned AXI_DATA_WIDTH = 32'd0
 ) (

@@ -32,53 +32,53 @@ interface AXI_BUS #(
   typedef logic [AXI_STRB_WIDTH-1:0] strb_t;
   typedef logic [AXI_USER_WIDTH-1:0] user_t;
 
-  id_t              aw_id;
-  addr_t            aw_addr;
-  axi_pkg::len_t    aw_len;
-  axi_pkg::size_t   aw_size;
-  axi_pkg::burst_t  aw_burst;
+  logic [AXI_ID_WIDTH-1:0]              aw_id;
+  logic [AXI_ADDR_WIDTH-1:0]            aw_addr;
+  logic [7:0]    aw_len;
+  logic [2:0]   aw_size;
+  logic [1:0]  aw_burst;
   logic             aw_lock;
-  axi_pkg::cache_t  aw_cache;
-  axi_pkg::prot_t   aw_prot;
-  axi_pkg::qos_t    aw_qos;
-  axi_pkg::region_t aw_region;
+  logic [3:0]  aw_cache;
+  logic [2:0]   aw_prot;
+  logic [3:0]    aw_qos;
+  logic [3:0] aw_region;
   axi_pkg::atop_t   aw_atop;
-  user_t            aw_user;
+  logic [AXI_USER_WIDTH-1:0]            aw_user;
   logic             aw_valid;
   logic             aw_ready;
 
-  data_t            w_data;
-  strb_t            w_strb;
+  logic [AXI_DATA_WIDTH-1:0]            w_data;
+  logic [AXI_STRB_WIDTH-1:0]            w_strb;
   logic             w_last;
-  user_t            w_user;
+  logic [AXI_USER_WIDTH-1:0]            w_user;
   logic             w_valid;
   logic             w_ready;
 
-  id_t              b_id;
-  axi_pkg::resp_t   b_resp;
-  user_t            b_user;
+  logic [AXI_ID_WIDTH-1:0]              b_id;
+  logic [1:0]   b_resp;
+  logic [AXI_USER_WIDTH-1:0]            b_user;
   logic             b_valid;
   logic             b_ready;
 
-  id_t              ar_id;
-  addr_t            ar_addr;
-  axi_pkg::len_t    ar_len;
-  axi_pkg::size_t   ar_size;
-  axi_pkg::burst_t  ar_burst;
+  logic [AXI_ID_WIDTH-1:0]              ar_id;
+  logic [AXI_ADDR_WIDTH-1:0]            ar_addr;
+  logic [7:0]    ar_len;
+  logic [2:0]   ar_size;
+  logic [1:0]  ar_burst;
   logic             ar_lock;
-  axi_pkg::cache_t  ar_cache;
-  axi_pkg::prot_t   ar_prot;
-  axi_pkg::qos_t    ar_qos;
-  axi_pkg::region_t ar_region;
-  user_t            ar_user;
+  logic [3:0]  ar_cache;
+  logic [2:0]   ar_prot;
+  logic [3:0]    ar_qos;
+  logic [3:0] ar_region;
+  logic [AXI_USER_WIDTH-1:0]            ar_user;
   logic             ar_valid;
   logic             ar_ready;
 
-  id_t              r_id;
-  data_t            r_data;
-  axi_pkg::resp_t   r_resp;
+  logic [AXI_ID_WIDTH-1:0]              r_id;
+  logic [AXI_DATA_WIDTH-1:0]            r_data;
+  logic [1:0]   r_resp;
   logic             r_last;
-  user_t            r_user;
+  logic [AXI_USER_WIDTH-1:0]            r_user;
   logic             r_valid;
   logic             r_ready;
 
@@ -419,27 +419,27 @@ interface AXI_LITE #(
   typedef logic [AXI_STRB_WIDTH-1:0] strb_t;
 
   // AW channel
-  addr_t          aw_addr;
-  axi_pkg::prot_t aw_prot;
+  logic [AXI_ADDR_WIDTH-1:0]          aw_addr;
+  logic [2:0] aw_prot;
   logic           aw_valid;
   logic           aw_ready;
 
-  data_t          w_data;
-  strb_t          w_strb;
+  logic [AXI_DATA_WIDTH-1:0]          w_data;
+  logic [AXI_STRB_WIDTH-1:0]          w_strb;
   logic           w_valid;
   logic           w_ready;
 
-  axi_pkg::resp_t b_resp;
+  typedef logic [1:0] b_resp;
   logic           b_valid;
   logic           b_ready;
 
-  addr_t          ar_addr;
-  axi_pkg::prot_t ar_prot;
+  logic [AXI_ADDR_WIDTH-1:0]          ar_addr;
+  logic [2:0] ar_prot;
   logic           ar_valid;
   logic           ar_ready;
 
-  data_t          r_data;
-  axi_pkg::resp_t r_resp;
+  logic [AXI_DATA_WIDTH-1:0]          r_data;
+  typedef logic [1:0] r_resp;
   logic           r_valid;
   logic           r_ready;
 
@@ -452,11 +452,11 @@ interface AXI_LITE #(
   );
 
   modport Slave (
-    input aw_addr, aw_prot, aw_valid, output aw_ready,
-    input w_data, w_strb, w_valid, output w_ready,
-    output b_resp, b_valid, input b_ready,
-    input ar_addr, ar_prot, ar_valid, output ar_ready,
-    output r_data, r_resp, r_valid, input r_ready
+    input aw_addr, input aw_prot, input aw_valid, output aw_ready,
+    input w_data, input w_strb, input w_valid, output w_ready,
+    output b_resp, output b_valid, input b_ready,
+    input ar_addr, input ar_prot, input ar_valid, output ar_ready,
+    output r_data, output r_resp, output r_valid, input r_ready
   );
 
   modport Monitor (
