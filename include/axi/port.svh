@@ -64,7 +64,7 @@
   input  __data_t          m_axi_``__name``_rdata,     \
   input  axi_pkg::resp_t   m_axi_``__name``_rresp,     \
   input  logic             m_axi_``__name``_rlast,     \
-  input  __r_user_t        m_axi_``__name``_ruser,     \
+  input  __r_user_t        m_axi_``__name``_ruser      \
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +114,57 @@
   output __data_t          s_axi_``__name``_rdata,     \
   output axi_pkg::resp_t   s_axi_``__name``_rresp,     \
   output logic             s_axi_``__name``_rlast,     \
-  output __r_user_t        s_axi_``__name``_ruser,     \
+  output __r_user_t        s_axi_``__name``_ruser      \
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Macros creating flat AXILite ports
+// `AXILITE_M_PORT(__name, __addr_t, __data_t, __strb_t)
+`define AXILITE_M_PORT(__name, __addr_t, __data_t, __strb_t) \
+  output logic             m_axi_``__name``_awvalid,   \
+  output __addr_t          m_axi_``__name``_awaddr,    \
+  output axi_pkg::prot_t   m_axi_``__name``_awprot,    \
+  output logic             m_axi_``__name``_wvalid,    \
+  output __data_t          m_axi_``__name``_wdata,     \
+  output __strb_t          m_axi_``__name``_wstrb,     \
+  output logic             m_axi_``__name``_bready,    \
+  output logic             m_axi_``__name``_arvalid,   \
+  output __addr_t          m_axi_``__name``_araddr,    \
+  output axi_pkg::prot_t   m_axi_``__name``_arprot,    \
+  output logic             m_axi_``__name``_rready,    \
+  input  logic             m_axi_``__name``_awready,   \
+  input  logic             m_axi_``__name``_arready,   \
+  input  logic             m_axi_``__name``_wready,    \
+  input  logic             m_axi_``__name``_bvalid,    \
+  input  axi_pkg::resp_t   m_axi_``__name``_bresp,     \
+  input  logic             m_axi_``__name``_rvalid,    \
+  input  __data_t          m_axi_``__name``_rdata,     \
+  input  axi_pkg::resp_t   m_axi_``__name``_rresp      \
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Macros creating flat AXILITE ports
+// `AXI_S_PORT(__name, __addr_t, __data_t, __strb_t)
+`define AXILITE_S_PORT(__name, __addr_t, __data_t, __strb_t) \
+  input  logic             s_axi_``__name``_awvalid,   \
+  input  __addr_t          s_axi_``__name``_awaddr,    \
+  input  axi_pkg::prot_t   s_axi_``__name``_awprot,    \
+  input  logic             s_axi_``__name``_wvalid,    \
+  input  __data_t          s_axi_``__name``_wdata,     \
+  input  __strb_t          s_axi_``__name``_wstrb,     \
+  input  logic             s_axi_``__name``_bready,    \
+  input  logic             s_axi_``__name``_arvalid,   \
+  input  __addr_t          s_axi_``__name``_araddr,    \
+  input  axi_pkg::prot_t   s_axi_``__name``_arprot,    \
+  input  logic             s_axi_``__name``_rready,    \
+  output logic             s_axi_``__name``_awready,   \
+  output logic             s_axi_``__name``_arready,   \
+  output logic             s_axi_``__name``_wready,    \
+  output logic             s_axi_``__name``_bvalid,    \
+  output axi_pkg::resp_t   s_axi_``__name``_bresp,     \
+  output logic             s_axi_``__name``_rvalid,    \
+  output __data_t          s_axi_``__name``_rdata,     \
+  output axi_pkg::resp_t   s_axi_``__name``_rresp      \
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 `endif

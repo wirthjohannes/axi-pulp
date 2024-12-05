@@ -277,3 +277,52 @@ import cf_math_pkg::idx_width;
   );
 
 endmodule
+
+module axi_xbar_simple #(
+  parameter int unsigned NUM_MASTERS = 1,
+  parameter int unsigned NUM_SLAVES  = 1,
+  parameter int unsigned AXI_ADDR_WIDTH = 0,
+  parameter int unsigned AXI_DATA_WIDTH = 0,
+  parameter int unsigned AXI_ID_WIDTH   = 0,
+) (
+  input  logic                                                      clk_i,
+  input  logic                                                      rst_ni,
+
+  /*AUTOINOUTMODPORT("AXI_LITE", "Slave", ".*", "in_")*/
+  
+  /*AUTOINOUTMODPORT("AXI_BUS", "Master", ".*", "out_")*/
+);
+
+localparam axi_pkg::xbar_cfg_t xbar_cfg = '{
+  NoSlvPorts:         NUM_MASTERS,
+  NoMstPorts:         NUM_SLAVES,
+  MaxMstTrans:        10,
+  MaxSlvTrans:        6,
+  FallThrough:        1'b0,
+  LatencyMode:        axi_pkg::CUT_ALL_AX,
+  PipelineStages:     1,
+  AxiIdWidthSlvPorts: 5,
+  AxiIdUsedSlvPorts:  3,
+  UniqueIds:          0,
+  AxiAddrWidth:       AXI_ADDR_WIDTH,
+  AxiDataWidth:       AXI_DATA_WIDTH,
+  NoAddrRules:        NUM_SLAVES
+};
+
+axi_xbar_intf #(
+  .AXI_USER_WIDTH ( 0  ),
+  .Cfg            ( xbar_cfg        ),
+  .ATOPS          ( 0               ),
+  .rule_t         ( rule_t          )
+) i_xbar_dut (
+  .clk_i                  ( clk_i     ),
+  .rst_ni                 ( rst_ni   ),
+  .test_i                 ( 1'b0    ),
+  .slv_ports              ( master  ),
+  .mst_ports              ( slave   ),
+  .addr_map_i             ( AddrMap ),
+  .en_default_mst_port_i  ( '0      ),
+  .default_mst_port_i     ( '0      )
+);
+
+endmodule
