@@ -20,151 +20,151 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Macros creating flat AXI ports
 // `AXI_M_PORT(__name, __addr_t, __data_t, __strb_t, __id_t, __aw_user_t, __w_user_t, __b_user_t, __ar_user_t, __r_user_t)
-`define AXI_M_PORT(__name, __addr_t, __data_t, __strb_t, __id_t, __aw_user_t, __w_user_t, __b_user_t, __ar_user_t, __r_user_t) \
-  output logic             m_axi_``__name``_awvalid,   \
-  output __id_t            m_axi_``__name``_awid,      \
-  output __addr_t          m_axi_``__name``_awaddr,    \
-  output axi_pkg::len_t    m_axi_``__name``_awlen,     \
-  output axi_pkg::size_t   m_axi_``__name``_awsize,    \
-  output axi_pkg::burst_t  m_axi_``__name``_awburst,   \
-  output logic             m_axi_``__name``_awlock,    \
-  output axi_pkg::cache_t  m_axi_``__name``_awcache,   \
-  output axi_pkg::prot_t   m_axi_``__name``_awprot,    \
-  output axi_pkg::qos_t    m_axi_``__name``_awqos,     \
-  output axi_pkg::region_t m_axi_``__name``_awregion,  \
-  output __aw_user_t       m_axi_``__name``_awuser,    \
-  output logic             m_axi_``__name``_wvalid,    \
-  output __data_t          m_axi_``__name``_wdata,     \
-  output __strb_t          m_axi_``__name``_wstrb,     \
-  output logic             m_axi_``__name``_wlast,     \
-  output __w_user_t        m_axi_``__name``_wuser,     \
-  output logic             m_axi_``__name``_bready,    \
-  output logic             m_axi_``__name``_arvalid,   \
-  output __id_t            m_axi_``__name``_arid,      \
-  output __addr_t          m_axi_``__name``_araddr,    \
-  output axi_pkg::len_t    m_axi_``__name``_arlen,     \
-  output axi_pkg::size_t   m_axi_``__name``_arsize,    \
-  output axi_pkg::burst_t  m_axi_``__name``_arburst,   \
-  output logic             m_axi_``__name``_arlock,    \
-  output axi_pkg::cache_t  m_axi_``__name``_arcache,   \
-  output axi_pkg::prot_t   m_axi_``__name``_arprot,    \
-  output axi_pkg::qos_t    m_axi_``__name``_arqos,     \
-  output axi_pkg::region_t m_axi_``__name``_arregion,  \
-  output __ar_user_t       m_axi_``__name``_aruser,    \
-  output logic             m_axi_``__name``_rready,    \
-  input  logic             m_axi_``__name``_awready,   \
-  input  logic             m_axi_``__name``_arready,   \
-  input  logic             m_axi_``__name``_wready,    \
-  input  logic             m_axi_``__name``_bvalid,    \
-  input  __id_t            m_axi_``__name``_bid,       \
-  input  axi_pkg::resp_t   m_axi_``__name``_bresp,     \
-  input  __b_user_t        m_axi_``__name``_buser,     \
-  input  logic             m_axi_``__name``_rvalid,    \
-  input  __id_t            m_axi_``__name``_rid,       \
-  input  __data_t          m_axi_``__name``_rdata,     \
-  input  axi_pkg::resp_t   m_axi_``__name``_rresp,     \
-  input  logic             m_axi_``__name``_rlast,     \
-  input  __r_user_t        m_axi_``__name``_ruser      \
+`define AXI_M_PORT(__name, __addr_t, __data_t, __strb_t, __id_t, __aw_user_t, __w_user_t, __b_user_t, __ar_user_t, __r_user_t, __more) \
+  output logic             m_axi_``__name``_awvalid``__more``,   \
+  output __id_t            m_axi_``__name``_awid``__more``,      \
+  output __addr_t          m_axi_``__name``_awaddr``__more``,    \
+  output axi_pkg::len_t    m_axi_``__name``_awlen``__more``,     \
+  output axi_pkg::size_t   m_axi_``__name``_awsize``__more``,    \
+  output axi_pkg::burst_t  m_axi_``__name``_awburst``__more``,   \
+  output logic             m_axi_``__name``_awlock``__more``,    \
+  output axi_pkg::cache_t  m_axi_``__name``_awcache``__more``,   \
+  output axi_pkg::prot_t   m_axi_``__name``_awprot``__more``,    \
+  output axi_pkg::qos_t    m_axi_``__name``_awqos``__more``,     \
+  output axi_pkg::region_t m_axi_``__name``_awregion``__more``,  \
+  output __aw_user_t       m_axi_``__name``_awuser``__more``,    \
+  output logic             m_axi_``__name``_wvalid``__more``,    \
+  output __data_t          m_axi_``__name``_wdata``__more``,     \
+  output __strb_t          m_axi_``__name``_wstrb``__more``,     \
+  output logic             m_axi_``__name``_wlast``__more``,     \
+  output __w_user_t        m_axi_``__name``_wuser``__more``,     \
+  output logic             m_axi_``__name``_bready``__more``,    \
+  output logic             m_axi_``__name``_arvalid``__more``,   \
+  output __id_t            m_axi_``__name``_arid``__more``,      \
+  output __addr_t          m_axi_``__name``_araddr``__more``,    \
+  output axi_pkg::len_t    m_axi_``__name``_arlen``__more``,     \
+  output axi_pkg::size_t   m_axi_``__name``_arsize``__more``,    \
+  output axi_pkg::burst_t  m_axi_``__name``_arburst``__more``,   \
+  output logic             m_axi_``__name``_arlock``__more``,    \
+  output axi_pkg::cache_t  m_axi_``__name``_arcache``__more``,   \
+  output axi_pkg::prot_t   m_axi_``__name``_arprot``__more``,    \
+  output axi_pkg::qos_t    m_axi_``__name``_arqos``__more``,     \
+  output axi_pkg::region_t m_axi_``__name``_arregion``__more``,  \
+  output __ar_user_t       m_axi_``__name``_aruser``__more``,    \
+  output logic             m_axi_``__name``_rready``__more``,    \
+  input  logic             m_axi_``__name``_awready``__more``,   \
+  input  logic             m_axi_``__name``_arready``__more``,   \
+  input  logic             m_axi_``__name``_wready``__more``,    \
+  input  logic             m_axi_``__name``_bvalid``__more``,    \
+  input  __id_t            m_axi_``__name``_bid``__more``,       \
+  input  axi_pkg::resp_t   m_axi_``__name``_bresp``__more``,     \
+  input  __b_user_t        m_axi_``__name``_buser``__more``,     \
+  input  logic             m_axi_``__name``_rvalid``__more``,    \
+  input  __id_t            m_axi_``__name``_rid``__more``,       \
+  input  __data_t          m_axi_``__name``_rdata``__more``,     \
+  input  axi_pkg::resp_t   m_axi_``__name``_rresp``__more``,     \
+  input  logic             m_axi_``__name``_rlast``__more``,     \
+  input  __r_user_t        m_axi_``__name``_ruser``__more``      \
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Macros creating flat AXI ports
 // `AXI_S_PORT(__name, __addr_t, __data_t, __strb_t, __id_t, __aw_user_t, __w_user_t, __b_user_t, __ar_user_t, __r_user_t)
-`define AXI_S_PORT(__name, __addr_t, __data_t, __strb_t, __id_t, __aw_user_t, __w_user_t, __b_user_t, __ar_user_t, __r_user_t) \
-  input  logic             s_axi_``__name``_awvalid,   \
-  input  __id_t            s_axi_``__name``_awid,      \
-  input  __addr_t          s_axi_``__name``_awaddr,    \
-  input  axi_pkg::len_t    s_axi_``__name``_awlen,     \
-  input  axi_pkg::size_t   s_axi_``__name``_awsize,    \
-  input  axi_pkg::burst_t  s_axi_``__name``_awburst,   \
-  input  logic             s_axi_``__name``_awlock,    \
-  input  axi_pkg::cache_t  s_axi_``__name``_awcache,   \
-  input  axi_pkg::prot_t   s_axi_``__name``_awprot,    \
-  input  axi_pkg::qos_t    s_axi_``__name``_awqos,     \
-  input  axi_pkg::region_t s_axi_``__name``_awregion,  \
-  input  __aw_user_t       s_axi_``__name``_awuser,    \
-  input  logic             s_axi_``__name``_wvalid,    \
-  input  __data_t          s_axi_``__name``_wdata,     \
-  input  __strb_t          s_axi_``__name``_wstrb,     \
-  input  logic             s_axi_``__name``_wlast,     \
-  input  __w_user_t        s_axi_``__name``_wuser,     \
-  input  logic             s_axi_``__name``_bready,    \
-  input  logic             s_axi_``__name``_arvalid,   \
-  input  __id_t            s_axi_``__name``_arid,      \
-  input  __addr_t          s_axi_``__name``_araddr,    \
-  input  axi_pkg::len_t    s_axi_``__name``_arlen,     \
-  input  axi_pkg::size_t   s_axi_``__name``_arsize,    \
-  input  axi_pkg::burst_t  s_axi_``__name``_arburst,   \
-  input  logic             s_axi_``__name``_arlock,    \
-  input  axi_pkg::cache_t  s_axi_``__name``_arcache,   \
-  input  axi_pkg::prot_t   s_axi_``__name``_arprot,    \
-  input  axi_pkg::qos_t    s_axi_``__name``_arqos,     \
-  input  axi_pkg::region_t s_axi_``__name``_arregion,  \
-  input  __ar_user_t       s_axi_``__name``_aruser,    \
-  input  logic             s_axi_``__name``_rready,    \
-  output logic             s_axi_``__name``_awready,   \
-  output logic             s_axi_``__name``_arready,   \
-  output logic             s_axi_``__name``_wready,    \
-  output logic             s_axi_``__name``_bvalid,    \
-  output __id_t            s_axi_``__name``_bid,       \
-  output axi_pkg::resp_t   s_axi_``__name``_bresp,     \
-  output __b_user_t        s_axi_``__name``_buser,     \
-  output logic             s_axi_``__name``_rvalid,    \
-  output __id_t            s_axi_``__name``_rid,       \
-  output __data_t          s_axi_``__name``_rdata,     \
-  output axi_pkg::resp_t   s_axi_``__name``_rresp,     \
-  output logic             s_axi_``__name``_rlast,     \
-  output __r_user_t        s_axi_``__name``_ruser      \
+`define AXI_S_PORT(__name, __addr_t, __data_t, __strb_t, __id_t, __aw_user_t, __w_user_t, __b_user_t, __ar_user_t, __r_user_t, __more) \
+  input  logic             s_axi_``__name``_awvalid``__more``,   \
+  input  __id_t            s_axi_``__name``_awid``__more``,      \
+  input  __addr_t          s_axi_``__name``_awaddr``__more``,    \
+  input  axi_pkg::len_t    s_axi_``__name``_awlen``__more``,     \
+  input  axi_pkg::size_t   s_axi_``__name``_awsize``__more``,    \
+  input  axi_pkg::burst_t  s_axi_``__name``_awburst``__more``,   \
+  input  logic             s_axi_``__name``_awlock``__more``,    \
+  input  axi_pkg::cache_t  s_axi_``__name``_awcache``__more``,   \
+  input  axi_pkg::prot_t   s_axi_``__name``_awprot``__more``,    \
+  input  axi_pkg::qos_t    s_axi_``__name``_awqos``__more``,     \
+  input  axi_pkg::region_t s_axi_``__name``_awregion``__more``,  \
+  input  __aw_user_t       s_axi_``__name``_awuser``__more``,    \
+  input  logic             s_axi_``__name``_wvalid``__more``,    \
+  input  __data_t          s_axi_``__name``_wdata``__more``,     \
+  input  __strb_t          s_axi_``__name``_wstrb``__more``,     \
+  input  logic             s_axi_``__name``_wlast``__more``,     \
+  input  __w_user_t        s_axi_``__name``_wuser``__more``,     \
+  input  logic             s_axi_``__name``_bready``__more``,    \
+  input  logic             s_axi_``__name``_arvalid``__more``,   \
+  input  __id_t            s_axi_``__name``_arid``__more``,      \
+  input  __addr_t          s_axi_``__name``_araddr``__more``,    \
+  input  axi_pkg::len_t    s_axi_``__name``_arlen``__more``,     \
+  input  axi_pkg::size_t   s_axi_``__name``_arsize``__more``,    \
+  input  axi_pkg::burst_t  s_axi_``__name``_arburst``__more``,   \
+  input  logic             s_axi_``__name``_arlock``__more``,    \
+  input  axi_pkg::cache_t  s_axi_``__name``_arcache``__more``,   \
+  input  axi_pkg::prot_t   s_axi_``__name``_arprot``__more``,    \
+  input  axi_pkg::qos_t    s_axi_``__name``_arqos``__more``,     \
+  input  axi_pkg::region_t s_axi_``__name``_arregion``__more``,  \
+  input  __ar_user_t       s_axi_``__name``_aruser``__more``,    \
+  input  logic             s_axi_``__name``_rready``__more``,    \
+  output logic             s_axi_``__name``_awready``__more``,   \
+  output logic             s_axi_``__name``_arready``__more``,   \
+  output logic             s_axi_``__name``_wready``__more``,    \
+  output logic             s_axi_``__name``_bvalid``__more``,    \
+  output __id_t            s_axi_``__name``_bid``__more``,       \
+  output axi_pkg::resp_t   s_axi_``__name``_bresp``__more``,     \
+  output __b_user_t        s_axi_``__name``_buser``__more``,     \
+  output logic             s_axi_``__name``_rvalid``__more``,    \
+  output __id_t            s_axi_``__name``_rid``__more``,       \
+  output __data_t          s_axi_``__name``_rdata``__more``,     \
+  output axi_pkg::resp_t   s_axi_``__name``_rresp``__more``,     \
+  output logic             s_axi_``__name``_rlast``__more``,     \
+  output __r_user_t        s_axi_``__name``_ruser``__more``      \
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Macros creating flat AXILite ports
 // `AXILITE_M_PORT(__name, __addr_t, __data_t, __strb_t)
-`define AXILITE_M_PORT(__name, __addr_t, __data_t, __strb_t) \
-  output logic             m_axi_``__name``_awvalid,   \
-  output __addr_t          m_axi_``__name``_awaddr,    \
-  output axi_pkg::prot_t   m_axi_``__name``_awprot,    \
-  output logic             m_axi_``__name``_wvalid,    \
-  output __data_t          m_axi_``__name``_wdata,     \
-  output __strb_t          m_axi_``__name``_wstrb,     \
-  output logic             m_axi_``__name``_bready,    \
-  output logic             m_axi_``__name``_arvalid,   \
-  output __addr_t          m_axi_``__name``_araddr,    \
-  output axi_pkg::prot_t   m_axi_``__name``_arprot,    \
-  output logic             m_axi_``__name``_rready,    \
-  input  logic             m_axi_``__name``_awready,   \
-  input  logic             m_axi_``__name``_arready,   \
-  input  logic             m_axi_``__name``_wready,    \
-  input  logic             m_axi_``__name``_bvalid,    \
-  input  axi_pkg::resp_t   m_axi_``__name``_bresp,     \
-  input  logic             m_axi_``__name``_rvalid,    \
-  input  __data_t          m_axi_``__name``_rdata,     \
-  input  axi_pkg::resp_t   m_axi_``__name``_rresp      \
+`define AXILITE_M_PORT(__name, __addr_t, __data_t, __strb_t, __more) \
+  output logic             m_axi_``__name``_awvalid``__more``,   \
+  output __addr_t          m_axi_``__name``_awaddr``__more``,    \
+  output axi_pkg::prot_t   m_axi_``__name``_awprot``__more``,    \
+  output logic             m_axi_``__name``_wvalid``__more``,    \
+  output __data_t          m_axi_``__name``_wdata``__more``,     \
+  output __strb_t          m_axi_``__name``_wstrb``__more``,     \
+  output logic             m_axi_``__name``_bready``__more``,    \
+  output logic             m_axi_``__name``_arvalid``__more``,   \
+  output __addr_t          m_axi_``__name``_araddr``__more``,    \
+  output axi_pkg::prot_t   m_axi_``__name``_arprot``__more``,    \
+  output logic             m_axi_``__name``_rready``__more``,    \
+  input  logic             m_axi_``__name``_awready``__more``,   \
+  input  logic             m_axi_``__name``_arready``__more``,   \
+  input  logic             m_axi_``__name``_wready``__more``,    \
+  input  logic             m_axi_``__name``_bvalid``__more``,    \
+  input  axi_pkg::resp_t   m_axi_``__name``_bresp``__more``,     \
+  input  logic             m_axi_``__name``_rvalid``__more``,    \
+  input  __data_t          m_axi_``__name``_rdata``__more``,     \
+  input  axi_pkg::resp_t   m_axi_``__name``_rresp``__more``      \
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Macros creating flat AXILITE ports
 // `AXI_S_PORT(__name, __addr_t, __data_t, __strb_t)
-`define AXILITE_S_PORT(__name, __addr_t, __data_t, __strb_t) \
-  input  logic             s_axi_``__name``_awvalid,   \
-  input  __addr_t          s_axi_``__name``_awaddr,    \
-  input  axi_pkg::prot_t   s_axi_``__name``_awprot,    \
-  input  logic             s_axi_``__name``_wvalid,    \
-  input  __data_t          s_axi_``__name``_wdata,     \
-  input  __strb_t          s_axi_``__name``_wstrb,     \
-  input  logic             s_axi_``__name``_bready,    \
-  input  logic             s_axi_``__name``_arvalid,   \
-  input  __addr_t          s_axi_``__name``_araddr,    \
-  input  axi_pkg::prot_t   s_axi_``__name``_arprot,    \
-  input  logic             s_axi_``__name``_rready,    \
-  output logic             s_axi_``__name``_awready,   \
-  output logic             s_axi_``__name``_arready,   \
-  output logic             s_axi_``__name``_wready,    \
-  output logic             s_axi_``__name``_bvalid,    \
-  output axi_pkg::resp_t   s_axi_``__name``_bresp,     \
-  output logic             s_axi_``__name``_rvalid,    \
-  output __data_t          s_axi_``__name``_rdata,     \
-  output axi_pkg::resp_t   s_axi_``__name``_rresp      \
+`define AXILITE_S_PORT(__name, __addr_t, __data_t, __strb_t, __more) \
+  input  logic             s_axi_``__name``_awvalid``__more``,   \
+  input  __addr_t          s_axi_``__name``_awaddr``__more``,    \
+  input  axi_pkg::prot_t   s_axi_``__name``_awprot``__more``,    \
+  input  logic             s_axi_``__name``_wvalid``__more``,    \
+  input  __data_t          s_axi_``__name``_wdata``__more``,     \
+  input  __strb_t          s_axi_``__name``_wstrb``__more``,     \
+  input  logic             s_axi_``__name``_bready``__more``,    \
+  input  logic             s_axi_``__name``_arvalid``__more``,   \
+  input  __addr_t          s_axi_``__name``_araddr``__more``,    \
+  input  axi_pkg::prot_t   s_axi_``__name``_arprot``__more``,    \
+  input  logic             s_axi_``__name``_rready``__more``,    \
+  output logic             s_axi_``__name``_awready``__more``,   \
+  output logic             s_axi_``__name``_arready``__more``,   \
+  output logic             s_axi_``__name``_wready``__more``,    \
+  output logic             s_axi_``__name``_bvalid``__more``,    \
+  output axi_pkg::resp_t   s_axi_``__name``_bresp``__more``,     \
+  output logic             s_axi_``__name``_rvalid``__more``,    \
+  output __data_t          s_axi_``__name``_rdata``__more``,     \
+  output axi_pkg::resp_t   s_axi_``__name``_rresp``__more``      \
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 `endif

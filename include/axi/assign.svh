@@ -694,4 +694,181 @@
   );
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Macros for assigning flattened AXI ports to req/resp AXI structs
+// Flat AXI ports are required by the Vivado IP Integrator. Vivado naming convention is followed.
+//
+// Usage Example:
+// `AXI_ASSIGN_MASTER_TO_FLAT("my_bus", master)
+`define AXI_ASSIGN_MASTER_TO_SIMPLE(pat, master, postfix) \
+  assign m_axi_``pat``_awvalid``postfix``  = master.aw_valid;  \
+  assign m_axi_``pat``_awid``postfix``     = master.aw_id;     \
+  assign m_axi_``pat``_awaddr``postfix``   = master.aw_addr;   \
+  assign m_axi_``pat``_awlen``postfix``    = master.aw_len;    \
+  assign m_axi_``pat``_awsize``postfix``   = master.aw_size;   \
+  assign m_axi_``pat``_awburst``postfix``  = master.aw_burst;  \
+  assign m_axi_``pat``_awlock``postfix``   = master.aw_lock;   \
+  assign m_axi_``pat``_awcache``postfix``  = master.aw_cache;  \
+  assign m_axi_``pat``_awprot``postfix``   = master.aw_prot;   \
+  assign m_axi_``pat``_awqos``postfix``    = master.aw_qos;    \
+  assign m_axi_``pat``_awregion``postfix`` = master.aw_region; \
+  assign m_axi_``pat``_awuser``postfix``   = master.aw_user;   \
+                                                 \
+  assign m_axi_``pat``_wvalid``postfix``   = master.w_valid;   \
+  assign m_axi_``pat``_wdata``postfix``    = master.w_data;    \
+  assign m_axi_``pat``_wstrb``postfix``    = master.w_strb;    \
+  assign m_axi_``pat``_wlast``postfix``    = master.w_last;    \
+  assign m_axi_``pat``_wuser``postfix``    = master.w_user;    \
+                                                 \
+  assign m_axi_``pat``_bready``postfix``   = master.b_ready;   \
+                                                 \
+  assign m_axi_``pat``_arvalid``postfix``  = master.ar_valid;  \
+  assign m_axi_``pat``_arid``postfix``     = master.ar_id;     \
+  assign m_axi_``pat``_araddr``postfix``   = master.ar_addr;   \
+  assign m_axi_``pat``_arlen``postfix``    = master.ar_len;    \
+  assign m_axi_``pat``_arsize``postfix``   = master.ar_size;   \
+  assign m_axi_``pat``_arburst``postfix``  = master.ar_burst;  \
+  assign m_axi_``pat``_arlock``postfix``   = master.ar_lock;   \
+  assign m_axi_``pat``_arcache``postfix``  = master.ar_cache;  \
+  assign m_axi_``pat``_arprot``postfix``   = master.ar_prot;   \
+  assign m_axi_``pat``_arqos``postfix``    = master.ar_qos;    \
+  assign m_axi_``pat``_arregion``postfix`` = master.ar_region; \
+  assign m_axi_``pat``_aruser``postfix``   = master.ar_user;   \
+                                                 \
+  assign m_axi_``pat``_rready``postfix``   = master.r_ready;   \
+                                                 \
+  assign master.aw_ready = m_axi_``pat``_awready``postfix``;   \
+  assign master.ar_ready = m_axi_``pat``_arready``postfix``;   \
+  assign master.w_ready  = m_axi_``pat``_wready``postfix``;    \
+                                                 \
+  assign master.b_valid  = m_axi_``pat``_bvalid``postfix``;    \
+  assign master.b_id     = m_axi_``pat``_bid``postfix``;       \
+  assign master.b_resp   = m_axi_``pat``_bresp``postfix``;     \
+  assign master.b_user   = m_axi_``pat``_buser``postfix``;     \
+                                                 \
+  assign master.r_valid  = m_axi_``pat``_rvalid``postfix``;    \
+  assign master.r_id     = m_axi_``pat``_rid``postfix``;       \
+  assign master.r_data   = m_axi_``pat``_rdata``postfix``;     \
+  assign master.r_resp   = m_axi_``pat``_rresp``postfix``;     \
+  assign master.r_last   = m_axi_``pat``_rlast``postfix``;     \
+  assign master.r_user   = m_axi_``pat``_ruser``postfix``;
+
+`define AXI_ASSIGN_SLAVE_TO_SIMPLE(pat, slave, postfix)  \
+  assign slave.aw_valid  = s_axi_``pat``_awvalid``postfix``;  \
+  assign slave.aw_id     = s_axi_``pat``_awid``postfix``;     \
+  assign slave.aw_addr   = s_axi_``pat``_awaddr``postfix``;   \
+  assign slave.aw_len    = s_axi_``pat``_awlen``postfix``;    \
+  assign slave.aw_size   = s_axi_``pat``_awsize``postfix``;   \
+  assign slave.aw_burst  = s_axi_``pat``_awburst``postfix``;  \
+  assign slave.aw_lock   = s_axi_``pat``_awlock``postfix``;   \
+  assign slave.aw_cache  = s_axi_``pat``_awcache``postfix``;  \
+  assign slave.aw_prot   = s_axi_``pat``_awprot``postfix``;   \
+  assign slave.aw_qos    = s_axi_``pat``_awqos``postfix``;    \
+  assign slave.aw_region = s_axi_``pat``_awregion``postfix``; \
+  assign slave.aw_user   = s_axi_``pat``_awuser``postfix``;   \
+                                                 \
+  assign slave.w_valid   = s_axi_``pat``_wvalid``postfix``;   \
+  assign slave.w_data    = s_axi_``pat``_wdata``postfix``;    \
+  assign slave.w_strb    = s_axi_``pat``_wstrb``postfix``;    \
+  assign slave.w_last    = s_axi_``pat``_wlast``postfix``;    \
+  assign slave.w_user    = s_axi_``pat``_wuser``postfix``;    \
+                                                 \
+  assign slave.b_ready   = s_axi_``pat``_bready``postfix``;   \
+                                                 \
+  assign slave.ar_valid  = s_axi_``pat``_arvalid``postfix``;  \
+  assign slave.ar_id     = s_axi_``pat``_arid``postfix``;     \
+  assign slave.ar_addr   = s_axi_``pat``_araddr``postfix``;   \
+  assign slave.ar_len    = s_axi_``pat``_arlen``postfix``;    \
+  assign slave.ar_size   = s_axi_``pat``_arsize``postfix``;   \
+  assign slave.ar_burst  = s_axi_``pat``_arburst``postfix``;  \
+  assign slave.ar_lock   = s_axi_``pat``_arlock``postfix``;   \
+  assign slave.ar_cache  = s_axi_``pat``_arcache``postfix``;  \
+  assign slave.ar_prot   = s_axi_``pat``_arprot``postfix``;   \
+  assign slave.ar_qos    = s_axi_``pat``_arqos``postfix``;    \
+  assign slave.ar_region = s_axi_``pat``_arregion``postfix``; \
+  assign slave.ar_user   = s_axi_``pat``_aruser``postfix``;   \
+                                                 \
+  assign slave.r_ready   = s_axi_``pat``_rready``postfix``;   \
+                                                 \
+  assign s_axi_``pat``_awready``postfix`` = slave.aw_ready;   \
+  assign s_axi_``pat``_arready``postfix`` = slave.ar_ready;   \
+  assign s_axi_``pat``_wready``postfix``  = slave.w_ready;    \
+                                                 \
+  assign s_axi_``pat``_bvalid``postfix``  = slave.b_valid;    \
+  assign s_axi_``pat``_bid``postfix``     = slave.b_id;       \
+  assign s_axi_``pat``_bresp``postfix``   = slave.b_resp;     \
+  assign s_axi_``pat``_buser``postfix``   = slave.b_user;     \
+                                                 \
+  assign s_axi_``pat``_rvalid``postfix``  = slave.r_valid;    \
+  assign s_axi_``pat``_rid``postfix``     = slave.r_id;       \
+  assign s_axi_``pat``_rdata``postfix``   = slave.r_data;     \
+  assign s_axi_``pat``_rresp``postfix``   = slave.r_resp;     \
+  assign s_axi_``pat``_rlast``postfix``   = slave.r_last;     \
+  assign s_axi_``pat``_ruser``postfix``   = slave.r_user;
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Macros for assigning flattened AXI ports to req/resp AXI structs
+// Flat AXI ports are required by the Vivado IP Integrator. Vivado naming convention is followed.
+//
+// Usage Example:
+// `AXI_ASSIGN_MASTER_TO_FLAT("my_bus", master)
+`define AXILITE_ASSIGN_MASTER_TO_SIMPLE(pat, master, postfix) \
+  assign m_axi_``pat``_awvalid``postfix``  = master.aw_valid;  \
+  assign m_axi_``pat``_awaddr``postfix``   = master.aw_addr;   \
+  assign m_axi_``pat``_awprot``postfix``   = master.aw_prot;   \
+                                                 \
+  assign m_axi_``pat``_wvalid``postfix``   = master.w_valid;   \
+  assign m_axi_``pat``_wdata``postfix``    = master.w_data;    \
+  assign m_axi_``pat``_wstrb``postfix``    = master.w_strb;    \
+                                                 \
+  assign m_axi_``pat``_bready``postfix``   = master.b_ready;   \
+                                                 \
+  assign m_axi_``pat``_arvalid``postfix``  = master.ar_valid;  \
+  assign m_axi_``pat``_araddr``postfix``   = master.ar_addr;   \
+  assign m_axi_``pat``_arprot``postfix``   = master.ar_prot;   \
+                                                 \
+  assign m_axi_``pat``_rready``postfix``   = master.r_ready;   \
+                                                 \
+  assign master.aw_ready = m_axi_``pat``_awready``postfix``;   \
+  assign master.ar_ready = m_axi_``pat``_arready``postfix``;   \
+  assign master.w_ready  = m_axi_``pat``_wready``postfix``;    \
+                                                 \
+  assign master.b_valid  = m_axi_``pat``_bvalid``postfix``;    \
+  assign master.b_resp   = m_axi_``pat``_bresp``postfix``;     \
+                                                 \
+  assign master.r_valid  = m_axi_``pat``_rvalid``postfix``;    \
+  assign master.r_data   = m_axi_``pat``_rdata``postfix``;     \
+  assign master.r_resp   = m_axi_``pat``_rresp``postfix``;     
+
+`define AXILITE_ASSIGN_SLAVE_TO_SIMPLE(pat, slave, postfix)  \
+  assign slave.aw_valid  = s_axi_``pat``_awvalid``postfix``;  \
+  assign slave.aw_addr   = s_axi_``pat``_awaddr``postfix``;   \
+  assign slave.aw_prot   = s_axi_``pat``_awprot``postfix``;   \
+                                                 \
+  assign slave.w_valid   = s_axi_``pat``_wvalid``postfix``;   \
+  assign slave.w_data    = s_axi_``pat``_wdata``postfix``;    \
+  assign slave.w_strb    = s_axi_``pat``_wstrb``postfix``;    \
+                                                 \
+  assign slave.b_ready   = s_axi_``pat``_bready``postfix``;   \
+                                                 \
+  assign slave.ar_valid  = s_axi_``pat``_arvalid``postfix``;  \
+  assign slave.ar_addr   = s_axi_``pat``_araddr``postfix``;   \
+  assign slave.ar_prot   = s_axi_``pat``_arprot``postfix``;   \
+                                                 \
+  assign slave.r_ready   = s_axi_``pat``_rready``postfix``;   \
+                                                 \
+  assign s_axi_``pat``_awready``postfix`` = slave.aw_ready;   \
+  assign s_axi_``pat``_arready``postfix`` = slave.ar_ready;   \
+  assign s_axi_``pat``_wready``postfix``  = slave.w_ready;    \
+                                                 \
+  assign s_axi_``pat``_bvalid``postfix``  = slave.b_valid;    \
+  assign s_axi_``pat``_bresp``postfix``   = slave.b_resp;     \
+                                                 \
+  assign s_axi_``pat``_rvalid``postfix``  = slave.r_valid;    \
+  assign s_axi_``pat``_rdata``postfix``   = slave.r_data;     \
+  assign s_axi_``pat``_rresp``postfix``   = slave.r_resp;     
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 `endif
