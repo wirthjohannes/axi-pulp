@@ -565,3 +565,48 @@ module axi_lite_dw_converter_intf #(
     .mst_res_i ( mst_res )
   );
 endmodule
+
+
+`include "axi/assign.svh"
+`include "axi/port.svh"
+
+
+module axi_lite_dw_converter_simple #(
+    parameter int unsigned AXI_ADDR_WIDTH          = 1,
+    parameter int unsigned AXI_SLV_PORT_DATA_WIDTH = 8,
+    parameter int unsigned AXI_MST_PORT_DATA_WIDTH = 8,
+    parameter int unsigned AXI_SLV_PORT_STRB_WIDTH = AXI_SLV_PORT_DATA_WIDTH/8,
+    parameter int unsigned AXI_MST_PORT_STRB_WIDTH = AXI_MST_PORT_DATA_WIDTH/8
+) (
+  input          logic clk_i,
+  input          logic rst_ni,
+  `AXILITE_S_PORT(in, [AXI_ADDR_WIDTH-1:0], [AXI_SLV_PORT_DATA_WIDTH-1:0], [AXI_SLV_PORT_STRB_WIDTH-1:0], ),
+  `AXILITE_M_PORT(out, [AXI_ADDR_WIDTH-1:0], [AXI_MST_PORT_DATA_WIDTH-1:0], [AXI_MST_PORT_STRB_WIDTH-1:0], )
+);
+
+AXI_LITE#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_SLV_PORT_DATA_WIDTH)
+) slv();
+
+AXI_LITE#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_MST_PORT_DATA_WIDTH)
+) mst();
+
+`AXILITE_ASSIGN_SLAVE_TO_SIMPLE(in, slv, )
+
+`AXILITE_ASSIGN_MASTER_TO_SIMPLE(out, mst, )
+
+axi_lite_dw_converter_intf #(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_SLV_PORT_DATA_WIDTH(AXI_SLV_PORT_DATA_WIDTH),
+  .AXI_MST_PORT_DATA_WIDTH(AXI_MST_PORT_DATA_WIDTH)
+) intf (
+  .clk_i(clk_i),
+  .rst_ni(rst_ni),
+  .slv(slv),
+  .mst(mst)
+);
+
+endmodule

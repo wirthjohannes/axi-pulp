@@ -188,3 +188,56 @@ module axi_dw_converter_intf #(
   );
 
 endmodule : axi_dw_converter_intf
+
+`include "axi/assign.svh"
+`include "axi/port.svh"
+
+module axi_dw_converter_simple #(
+    parameter int unsigned AXI_ID_WIDTH            = 1,
+    parameter int unsigned AXI_ADDR_WIDTH          = 1,
+    parameter int unsigned AXI_SLV_PORT_DATA_WIDTH = 8,
+    parameter int unsigned AXI_MST_PORT_DATA_WIDTH = 8,
+    parameter int unsigned AXI_SLV_PORT_STRB_WIDTH = AXI_SLV_PORT_DATA_WIDTH/8,
+    parameter int unsigned AXI_MST_PORT_STRB_WIDTH = AXI_MST_PORT_DATA_WIDTH/8,
+    parameter int unsigned AXI_USER_WIDTH          = 0,
+    parameter int unsigned AXI_MAX_READS           = 8
+) (
+  input          logic clk_i,
+  input          logic rst_ni,
+  `AXI_S_PORT(in, [AXI_ADDR_WIDTH-1:0], [AXI_SLV_PORT_DATA_WIDTH-1:0], [AXI_SLV_PORT_STRB_WIDTH-1:0], [AXI_ID_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], ),
+  `AXI_M_PORT(out, [AXI_ADDR_WIDTH-1:0], [AXI_MST_PORT_DATA_WIDTH-1:0], [AXI_MST_PORT_STRB_WIDTH-1:0], [AXI_ID_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], )
+);
+
+AXI_BUS#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_SLV_PORT_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH)
+) slv();
+
+AXI_BUS#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_MST_PORT_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH)
+) mst();
+
+`AXI_ASSIGN_SLAVE_TO_SIMPLE(in, slv, )
+
+`AXI_ASSIGN_MASTER_TO_SIMPLE(out, mst, )
+
+axi_dw_converter_intf #(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH),
+  .AXI_MAX_READS(AXI_MAX_READS),
+  .AXI_SLV_PORT_DATA_WIDTH(AXI_SLV_PORT_DATA_WIDTH),
+  .AXI_MST_PORT_DATA_WIDTH(AXI_MST_PORT_DATA_WIDTH)
+) intf (
+  .clk_i(clk_i),
+  .rst_ni(rst_ni),
+  .slv(slv),
+  .mst(mst)
+);
+
+endmodule
