@@ -767,6 +767,7 @@
   assign slave.aw_qos    = s_axi_``pat``_awqos``postfix``;    \
   assign slave.aw_region = s_axi_``pat``_awregion``postfix``; \
   assign slave.aw_user   = s_axi_``pat``_awuser``postfix``;   \
+  assign slave.aw_atop  = 0; \
                                                  \
   assign slave.w_valid   = s_axi_``pat``_wvalid``postfix``;   \
   assign slave.w_data    = s_axi_``pat``_wdata``postfix``;    \

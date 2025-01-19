@@ -324,3 +324,50 @@ module axi_to_axi_lite_intf #(
     .mst_resp_i ( lite_resp  )
   );
 endmodule
+
+
+`include "axi/assign.svh"
+`include "axi/port.svh"
+
+module axi_to_axi_lite_simple #(
+  parameter int unsigned AXI_ADDR_WIDTH = 0,
+  parameter int unsigned AXI_DATA_WIDTH = 0,
+  parameter int unsigned AXI_ID_WIDTH   = 0,
+  parameter int unsigned AXI_STRB_WIDTH = AXI_DATA_WIDTH / 8,
+  parameter int unsigned AXI_USER_WIDTH = 0
+) (
+  input logic     clk_i,
+  input logic     rst_ni,
+  `AXILITE_M_PORT(out, [AXI_ADDR_WIDTH-1:0], [AXI_DATA_WIDTH-1:0], [AXI_STRB_WIDTH-1:0], ),
+  `AXI_S_PORT(in, [AXI_ADDR_WIDTH-1:0], [AXI_DATA_WIDTH-1:0], [AXI_STRB_WIDTH-1:0], [AXI_ID_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], )
+);
+
+AXI_LITE#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH)
+) lite();
+
+AXI_BUS#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(0)
+) full();
+
+`AXILITE_ASSIGN_MASTER_TO_SIMPLE(out, lite, )
+
+`AXI_ASSIGN_SLAVE_TO_SIMPLE(in, full, )
+
+axi_to_axi_lite_intf #(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH)
+) intf (
+  .clk_i(clk_i),
+  .rst_ni(rst_ni),
+  .slv(full),
+  .mst(lite)
+);
+
+endmodule
