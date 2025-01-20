@@ -293,3 +293,62 @@ module axi_serializer_intf #(
 `endif
 // pragma translate_on
 endmodule
+
+
+`include "axi/assign.svh"
+`include "axi/port.svh"
+
+module axi_serializer_simple #(
+  /// AXI4+ATOP ID width.
+  parameter int unsigned AXI_ID_WIDTH   = 32'd0,
+  /// AXI4+ATOP address width.
+  parameter int unsigned AXI_ADDR_WIDTH = 32'd0,
+  /// AXI4+ATOP data width.
+  parameter int unsigned AXI_DATA_WIDTH = 32'd0,
+  parameter int unsigned AXI_STRB_WIDTH = AXI_DATA_WIDTH/8,
+  /// AXI4+ATOP user width.
+  parameter int unsigned AXI_USER_WIDTH = 32'd0,
+  /// Maximum number of in flight read transactions.
+  parameter int unsigned MAX_READ_TXNS  = 32'd0,
+  /// Maximum number of in flight write transactions.
+  parameter int unsigned MAX_WRITE_TXNS = 32'd0
+) (
+  input          logic clk_i,
+  input          logic rst_ni,
+  `AXI_S_PORT(in, [AXI_ADDR_WIDTH-1:0], [AXI_DATA_WIDTH-1:0], [AXI_STRB_WIDTH-1:0], [AXI_ID_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], ),
+  `AXI_M_PORT(out, [AXI_ADDR_WIDTH-1:0], [AXI_DATA_WIDTH-1:0], [AXI_STRB_WIDTH-1:0], [0:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], )
+);
+
+AXI_BUS#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH)
+) slv();
+
+AXI_BUS#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH)
+) mst();
+
+`AXI_ASSIGN_SLAVE_TO_SIMPLE(in, slv, )
+
+`AXI_ASSIGN_MASTER_TO_SIMPLE(out, mst, )
+
+axi_serializer_intf #(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH),
+  .MAX_READ_TXNS(MAX_READ_TXNS),
+  .MAX_WRITE_TXNS(MAX_WRITE_TXNS),
+  .AXI_DATA_WIDTH(AXI_DATA_WIDTH)
+) intf (
+  .clk_i(clk_i),
+  .rst_ni(rst_ni),
+  .slv(slv),
+  .mst(mst)
+);
+
+endmodule
