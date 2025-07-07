@@ -205,7 +205,7 @@ module axi_dw_converter_simple #(
   input          logic clk_i,
   input          logic rst_ni,
   `AXI_S_PORT(in, [AXI_ADDR_WIDTH-1:0], [AXI_SLV_PORT_DATA_WIDTH-1:0], [AXI_SLV_PORT_STRB_WIDTH-1:0], [AXI_ID_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], ),
-  `AXI_M_PORT(out, [AXI_ADDR_WIDTH-1:0], [AXI_MST_PORT_DATA_WIDTH-1:0], [AXI_MST_PORT_STRB_WIDTH-1:0], [AXI_ID_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], )
+  `AXI_M_PORT(out, [AXI_ADDR_WIDTH-1:0], [AXI_MST_PORT_DATA_WIDTH-1:0], [AXI_MST_PORT_STRB_WIDTH-1:0], [0:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], [AXI_USER_WIDTH-1:0], )
 );
 
 AXI_BUS#(
@@ -220,11 +220,9 @@ AXI_BUS#(
   .AXI_DATA_WIDTH(AXI_MST_PORT_DATA_WIDTH),
   .AXI_ID_WIDTH(AXI_ID_WIDTH),
   .AXI_USER_WIDTH(AXI_USER_WIDTH)
-) mst();
+) conn();
 
 `AXI_ASSIGN_SLAVE_TO_SIMPLE(in, slv, )
-
-`AXI_ASSIGN_MASTER_TO_SIMPLE(out, mst, )
 
 axi_dw_converter_intf #(
   .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
@@ -237,6 +235,29 @@ axi_dw_converter_intf #(
   .clk_i(clk_i),
   .rst_ni(rst_ni),
   .slv(slv),
+  .mst(conn)
+);
+
+AXI_BUS#(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_DATA_WIDTH(AXI_MST_PORT_DATA_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH)
+) mst();
+
+`AXI_ASSIGN_MASTER_TO_SIMPLE(out, mst, )
+
+axi_serializer_intf #(
+  .AXI_ADDR_WIDTH(AXI_ADDR_WIDTH),
+  .AXI_ID_WIDTH(AXI_ID_WIDTH),
+  .AXI_USER_WIDTH(AXI_USER_WIDTH),
+  .MAX_READ_TXNS(AXI_MAX_READS),
+  .MAX_WRITE_TXNS(AXI_MAX_READS),
+  .AXI_DATA_WIDTH(AXI_MST_PORT_DATA_WIDTH)
+) serial (
+  .clk_i(clk_i),
+  .rst_ni(rst_ni),
+  .slv(conn),
   .mst(mst)
 );
 

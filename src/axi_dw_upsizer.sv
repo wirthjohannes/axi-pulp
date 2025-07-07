@@ -275,15 +275,16 @@ module axi_dw_upsizer #(
     assign id_clash_upsizer[t] = arb_slv_ar_id == mst_ar_id[t] && !idle_read_upsizer[t];
   end
 
-  onehot_to_bin #(
+  /*onehot_to_bin #(
     .ONEHOT_WIDTH(AxiMaxReads)
   ) i_id_clash_onehot_to_bin (
     .onehot(id_clash_upsizer    ),
     .bin   (idx_id_clash_upsizer)
-  );
+  );*/
 
   // Choose an idle upsizer, unless there is an id clash
-  assign idx_ar_upsizer = (|id_clash_upsizer) ? idx_id_clash_upsizer : idx_idle_upsizer;
+  //assign idx_ar_upsizer = (|id_clash_upsizer) ? idx_id_clash_upsizer : idx_idle_upsizer;
+  assign idx_ar_upsizer = idx_idle_upsizer;
 
   // This logic is used to resolve which upsizer is handling
   // each outstanding read transaction
@@ -291,21 +292,47 @@ module axi_dw_upsizer #(
   logic     r_upsizer_valid;
   tran_id_t idx_r_upsizer;
 
-  logic [AxiMaxReads-1:0] rid_upsizer_match;
+  //logic [AxiMaxReads-1:0] rid_upsizer_match;
 
   // Is there a upsizer handling this transaction?
-  assign r_upsizer_valid = |rid_upsizer_match;
+  //assign r_upsizer_valid = |rid_upsizer_match;
 
-  for (genvar t = 0; t < AxiMaxReads; t++) begin: gen_rid_match
+  /*for (genvar t = 0; t < AxiMaxReads; t++) begin: gen_rid_match
     assign rid_upsizer_match[t] = (mst_resp.r.id == mst_ar_id[t]) && !idle_read_upsizer[t];
-  end
+  end*/
+  logic     [AxiMaxReads-1:0] idqueue_push;
+  logic     [AxiMaxReads-1:0] idqueue_pop;
 
-  onehot_to_bin #(
+  id_queue #(
+    .ID_WIDTH(AxiIdWidth ),
+    .CAPACITY(AxiMaxReads),
+    .data_t  (tran_id_t  )
+  ) i_read_id_queue (
+    .clk_i           (clk_i           ),
+    .rst_ni          (rst_ni          ),
+    .inp_id_i        (arb_slv_ar_id   ),
+    .inp_data_i      (idx_ar_upsizer  ),
+    .inp_req_i       (|idqueue_push   ),
+    .inp_gnt_o       (/* Unused  */   ),
+    .oup_id_i        (mst_resp.r.id   ),
+    .oup_pop_i       (|idqueue_pop    ),
+    .oup_req_i       (1'b1            ),
+    .oup_data_o      (idx_r_upsizer   ),
+    .oup_data_valid_o(r_upsizer_valid ),
+    .oup_gnt_o       (/* Unused  */   ),
+    .exists_data_i   ('0              ),
+    .exists_mask_i   ('0              ),
+    .exists_req_i    ('0              ),
+    .exists_o        (/* Unused  */   ),
+    .exists_gnt_o    (/* Unused  */   )
+  );
+
+  /*onehot_to_bin #(
     .ONEHOT_WIDTH(AxiMaxReads)
   ) i_rid_upsizer_lzc (
     .onehot(rid_upsizer_match),
     .bin   (idx_r_upsizer    )
-  );
+  );*/
 
   typedef struct packed {
     ar_chan_t ar                ;
@@ -345,6 +372,9 @@ module axi_dw_upsizer #(
       slv_r_tran[t].resp = mst_resp.r.resp;
       slv_r_tran[t].user = mst_resp.r.user;
 
+      idqueue_push[t] = '0;
+      idqueue_pop[t]  = '0;
+
       arb_slv_ar_gnt_tran[t] = 1'b0;
 
       mst_r_ready_tran[t] = 1'b0;
@@ -367,6 +397,8 @@ module axi_dw_upsizer #(
           // New read request
           if (arb_slv_ar_req && (idx_ar_upsizer == t)) begin
             arb_slv_ar_gnt_tran[t] = 1'b1;
+
+            idqueue_push[t] = 1'b1;
 
             // Must inject an AW request into this upsizer
             if (inject_aw_into_ar) begin
@@ -481,7 +513,7 @@ module axi_dw_upsizer #(
         R_PASSTHROUGH, R_INCR_UPSIZE: begin
           // Request was accepted
           if (!r_req_q.ar_valid)
-            if (mst_resp.r_valid && (idx_r_upsizer == t) && r_upsizer_valid) begin
+            if (mst_resp.r_valid && (idx_r_upsizer == t) && r_upsizer_valid) begin 
               automatic addr_t mst_port_offset = AxiMstPortStrbWidth == 1 ? '0 : r_req_q.ar.addr[idx_width(AxiMstPortStrbWidth)-1:0];
               automatic addr_t slv_port_offset = AxiSlvPortStrbWidth == 1 ? '0 : r_req_q.ar.addr[idx_width(AxiSlvPortStrbWidth)-1:0];
 
@@ -524,8 +556,10 @@ module axi_dw_upsizer #(
                   default: ;
                 endcase
 
-                if (r_req_q.burst_len == '0)
+                if (r_req_q.burst_len == '0) begin
                   r_state_d = R_IDLE;
+                  idqueue_pop[t] = 1'b1;
+                end
               end
             end
         end
